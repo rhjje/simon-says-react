@@ -35,64 +35,14 @@ class App extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  playGame() {
-    const colors = ['red', 'green', 'yellow', 'blue'];
-    const layout = [];
-    for (let i = 0; i < this.state.round; i += 1) {
-      layout.push(colors[Math.floor(Math.random() * colors.length)]);
-    }
-    this.setState({remainingItems: layout.length});
-    this.sequence = [...layout];
-    this.sequence.reverse();
-    const playSounds = (index) => {
-      if (index < 0) {
-        this.setState({playMode: true});
-        return;
-      }
-      this.activateCard(layout[index]);
-      setTimeout(() => this.deactivateCard(), 400);
-      setTimeout(() => playSounds(index - 1), this.state.interval);
-    };
-
-    playSounds(layout.length - 1);
-  }
-
-  activateCard(card) {
-    switch(card) {
-      case 'red':
-        this.setState({activeItem: 'red'});
-        red.play();
-        break;
-      case 'green':
-        this.setState({activeItem: 'green'});
-        green.play();
-        break;
-      case 'yellow':
-        this.setState({activeItem: 'yellow'});
-        yellow.play();
-        break;
-      case 'blue':
-        this.setState({activeItem: 'blue'});
-        blue.play();
-        break;
-      default:
-        break;
-    }
-  }
-
-  deactivateCard() {
-    this.setState({
-      activeItem: null
-    });
-  }
-
   handleButton() {
-    this.setState({round: 1}, () => this.playGame());
+    this.setState({ round: 1 }, () => this.playGame());
   }
 
   handleClick(event) {
     if (this.state.playMode) {
-      if ((this.sequence[this.numberItem] === event.target.dataset.tile) && this.numberItem === this.sequence.length - 1) {
+      if ((this.sequence[this.numberItem] === event.target.dataset.tile)
+      && this.numberItem === this.sequence.length - 1) {
         this.numberItem = 0;
         this.setState({
           playMode: false,
@@ -100,14 +50,14 @@ class App extends React.Component {
         });
         const round = this.state.round + 1;
         setTimeout(() => {
-          this.setState({round}, () => this.playGame());
-        }, 1000)
+          this.setState({ round }, () => this.playGame());
+        }, 1000);
       } else if (this.sequence[this.numberItem] === event.target.dataset.tile) {
         const remainingItems = this.state.remainingItems - 1;
-        this.setState({remainingItems});
+        this.setState({ remainingItems });
         this.numberItem += 1;
       } else {
-        this.setState({gameOver: true})
+        this.setState({ gameOver: true });
         this.numberItem = 0;
         setTimeout(() => {
           this.setState({
@@ -122,29 +72,84 @@ class App extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({interval: +event.target.value});
+    this.setState({ interval: +event.target.value });
+  }
+
+  playGame() {
+    const colors = ['red', 'green', 'yellow', 'blue'];
+    const layout = [];
+    for (let i = 0; i < this.state.round; i += 1) {
+      layout.push(colors[Math.floor(Math.random() * colors.length)]);
+    }
+    this.setState({ remainingItems: layout.length });
+    this.sequence = [...layout];
+    this.sequence.reverse();
+    const playSounds = (index) => {
+      if (index < 0) {
+        this.setState({ playMode: true });
+        return;
+      }
+      this.activateCard(layout[index]);
+      setTimeout(() => this.deactivateCard(), 400);
+      setTimeout(() => playSounds(index - 1), this.state.interval);
+    };
+
+    playSounds(layout.length - 1);
+  }
+
+  activateCard(card) {
+    switch (card) {
+      case 'red':
+        this.setState({ activeItem: 'red' });
+        red.play();
+        break;
+      case 'green':
+        this.setState({ activeItem: 'green' });
+        green.play();
+        break;
+      case 'yellow':
+        this.setState({ activeItem: 'yellow' });
+        yellow.play();
+        break;
+      case 'blue':
+        this.setState({ activeItem: 'blue' });
+        blue.play();
+        break;
+      default:
+        break;
+    }
+  }
+
+  deactivateCard() {
+    this.setState({
+      activeItem: null
+    });
   }
 
   render() {
-    return (<>
-      <div className="wrapper">
-        <h1 className="title">Simon says</h1>
-        <GameField 
-          activeItem={this.state.activeItem} 
-          onClickItem={this.handleClick} 
-          playMode={this.state.playMode} 
-          gameOver={this.state.gameOver}
-          round={this.state.round} />
-        <div className="control-panel">
-          <GameInfo 
-            onButtonClick={this.handleButton} 
-            round={this.state.round} 
-            gameOver={this.state.gameOver} 
-            remainingItems={this.state.remainingItems} />
-          <GameOptions handleChange={this.handleChange} />
+    return (
+      <>
+        <div className="wrapper">
+          <h1 className="title">Simon says</h1>
+          <GameField
+            activeItem={this.state.activeItem}
+            onClickItem={this.handleClick}
+            playMode={this.state.playMode}
+            gameOver={this.state.gameOver}
+            round={this.state.round}
+          />
+          <div className="control-panel">
+            <GameInfo
+              onButtonClick={this.handleButton}
+              round={this.state.round}
+              gameOver={this.state.gameOver}
+              remainingItems={this.state.remainingItems}
+            />
+            <GameOptions handleChange={this.handleChange} />
+          </div>
         </div>
-      </div>
-    </>);
+      </>
+    );
   }
 }
 
