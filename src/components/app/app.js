@@ -135,6 +135,12 @@ class App extends React.Component {
     return (
       <>
         <h1 className="title">Simon says</h1>
+        <GameInfo
+          onButtonClick={this.handleButton}
+          round={this.state.round}
+          gameOver={this.state.gameOver}
+          remainingItems={this.state.remainingItems}
+        />
         <GameField
           activeItem={this.state.activeItem}
           onClickItem={this.handleClick}
@@ -142,15 +148,10 @@ class App extends React.Component {
           gameOver={this.state.gameOver}
           round={this.state.round}
         />
-        <div className="control-panel">
-          <GameInfo
-            onButtonClick={this.handleButton}
-            round={this.state.round}
-            gameOver={this.state.gameOver}
-            remainingItems={this.state.remainingItems}
-          />
-          <GameOptions handleChange={this.handleChange} onButtonClick={this.handleButton} />
-        </div>
+        <GameOptions
+          handleChange={this.handleChange}
+          onButtonClick={this.handleButton}
+        />
       </>
     );
   }
