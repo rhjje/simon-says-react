@@ -1,21 +1,18 @@
 import React from 'react';
+import './app.scss';
 import GameField from '../game-field/game-field';
 import GameInfo from '../game-info/game-info';
 import GameOptions from '../game-options/game-options';
 
-import soundRed from '../../assets/sounds/1.mp3';
+import audioRed from '../../assets/sounds/1.mp3';
 import audioGreen from '../../assets/sounds/2.mp3';
 import audioYellow from '../../assets/sounds/3.mp3';
 import audioBlue from '../../assets/sounds/4.mp3';
-// import failure from '../../assets/sounds/failure.mp3';
-// import audioCorrect from '../../assets/sounds/correct.mp3';
 
-const red = new Audio(soundRed);
+const red = new Audio(audioRed);
 const green = new Audio(audioGreen);
 const yellow = new Audio(audioYellow);
 const blue = new Audio(audioBlue);
-// const fail = new Audio(failure);
-// const correct = new Audio(audioCorrect);
 
 class App extends React.Component {
   constructor(props) {
@@ -76,11 +73,19 @@ class App extends React.Component {
   }
 
   playGame() {
-    const colors = ['red', 'green', 'yellow', 'blue'];
     const layout = [];
     for (let i = 0; i < this.state.round; i += 1) {
-      layout.push(colors[Math.floor(Math.random() * colors.length)]);
+      const getRandomColor = () => {
+        const colors = ['red', 'green', 'yellow', 'blue'];
+        const currentColor = colors[Math.floor(Math.random() * colors.length)];
+        if (currentColor !== layout[layout.length - 1]) {
+          return currentColor;
+        }
+        return getRandomColor();
+      };
+      layout.push(getRandomColor());
     }
+
     this.setState({ remainingItems: layout.length });
     this.sequence = [...layout];
     this.sequence.reverse();
@@ -129,24 +134,22 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <div className="wrapper">
-          <h1 className="title">Simon says</h1>
-          <GameField
-            activeItem={this.state.activeItem}
-            onClickItem={this.handleClick}
-            playMode={this.state.playMode}
-            gameOver={this.state.gameOver}
+        <h1 className="title">Simon says</h1>
+        <GameField
+          activeItem={this.state.activeItem}
+          onClickItem={this.handleClick}
+          playMode={this.state.playMode}
+          gameOver={this.state.gameOver}
+          round={this.state.round}
+        />
+        <div className="control-panel">
+          <GameInfo
+            onButtonClick={this.handleButton}
             round={this.state.round}
+            gameOver={this.state.gameOver}
+            remainingItems={this.state.remainingItems}
           />
-          <div className="control-panel">
-            <GameInfo
-              onButtonClick={this.handleButton}
-              round={this.state.round}
-              gameOver={this.state.gameOver}
-              remainingItems={this.state.remainingItems}
-            />
-            <GameOptions handleChange={this.handleChange} />
-          </div>
+          <GameOptions handleChange={this.handleChange} onButtonClick={this.handleButton} />
         </div>
       </>
     );

@@ -1,10 +1,11 @@
 import React from 'react';
+import './game-info.scss';
 
-const GameInfo = ({ onButtonClick, round, remainingItems }) => {
+const GameInfo = ({ round, remainingItems }) => {
   return (
     <div className="game-info">
-      <h2 className="subtitle">{`Round: ${round} Items: ${remainingItems}`}</h2>
-      <button type="button" className="game-play" onClick={onButtonClick}>Play</button>
+      <div className="game-info__round">{`Round: ${round}`}</div>
+      <div className="game-info__remaining">{`Remaining items: ${remainingItems}`}</div>
     </div>
   );
 };

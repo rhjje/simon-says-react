@@ -1,0 +1,10 @@
+.game-info {
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-info__round,
+.game-info__remaining {
+  font-size: 2.4rem;
+}

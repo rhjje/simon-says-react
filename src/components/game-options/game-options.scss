@@ -1,0 +1,20 @@
+.game-options {
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-difficulty {
+  label {
+    font-size: 1.8rem;
+  }
+  select {
+    font-size: 1.8rem;
+    option {
+      font-size: 1.8rem;
+    }
+  }
+}
+
+.game-play {
+  font-size: 1.8rem;
+}
