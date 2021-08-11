@@ -23,20 +23,20 @@ class App extends React.Component {
       round: 0,
       gameOver: false,
       playMode: false,
-      interval: 1500,
+      difficulty: localStorage.getItem('difficulty') || '1000',
       activeItem: null,
       remainingItems: 0
     };
-    this.handleButton = this.handleButton.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleClickPlay = this.handleClickPlay.bind(this);
+    this.handleClickItem = this.handleClickItem.bind(this);
+    this.handleChangeDifficulty = this.handleChangeDifficulty.bind(this);
   }
 
-  handleButton() {
+  handleClickPlay() {
     this.setState({ round: 1 }, () => this.playGame());
   }
 
-  handleClick(event) {
+  handleClickItem(event) {
     if (this.state.playMode) {
       if ((this.sequence[this.numberItem] === event.target.dataset.tile)
       && this.numberItem === this.sequence.length - 1) {
@@ -50,8 +50,7 @@ class App extends React.Component {
           this.setState({ round }, () => this.playGame());
         }, 1000);
       } else if (this.sequence[this.numberItem] === event.target.dataset.tile) {
-        const remainingItems = this.state.remainingItems - 1;
-        this.setState({ remainingItems });
+        this.setState((prevState) => ({ remainingItems: prevState.remainingItems - 1 }));
         this.numberItem += 1;
       } else {
         this.setState({ gameOver: true });
@@ -68,8 +67,9 @@ class App extends React.Component {
     }
   }
 
-  handleChange(event) {
-    this.setState({ interval: +event.target.value });
+  handleChangeDifficulty(event) {
+    localStorage.setItem('difficulty', event.target.value);
+    this.setState({ difficulty: event.target.value });
   }
 
   playGame() {
@@ -96,7 +96,11 @@ class App extends React.Component {
       }
       this.activateCard(layout[index]);
       setTimeout(() => this.deactivateCard(), 400);
-      setTimeout(() => playSounds(index - 1), this.state.interval);
+      if (index === 0) {
+        setTimeout(() => playSounds(index - 1), 400);
+      } else {
+        setTimeout(() => playSounds(index - 1), +this.state.difficulty);
+      }
     };
 
     playSounds(layout.length - 1);
@@ -136,21 +140,20 @@ class App extends React.Component {
       <>
         <h1 className="title">Simon says</h1>
         <GameInfo
-          onButtonClick={this.handleButton}
           round={this.state.round}
-          gameOver={this.state.gameOver}
           remainingItems={this.state.remainingItems}
         />
         <GameField
           activeItem={this.state.activeItem}
-          onClickItem={this.handleClick}
+          onClickItem={this.handleClickItem}
           playMode={this.state.playMode}
           gameOver={this.state.gameOver}
           round={this.state.round}
         />
         <GameOptions
-          handleChange={this.handleChange}
-          onButtonClick={this.handleButton}
+          difficulty={this.state.difficulty}
+          onChangeDifficulty={this.handleChangeDifficulty}
+          onClickPlay={this.handleClickPlay}
         />
       </>
     );
