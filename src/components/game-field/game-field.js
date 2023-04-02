@@ -4,7 +4,9 @@ import './game-field.scss';
 const GameField = ({ activeItem, onClickItem, playMode, gameOver, round }) => {
   return (
     <div className="game-field">
-      {gameOver ? <div className="game-over">{`You lost in round ${round} (:`}</div> : null}
+      {gameOver ? (
+        <div className="game-over">{`You lost in round ${round} (:`}</div>
+      ) : null}
       {['blue', 'red', 'yellow', 'green'].map((item) => {
         if (activeItem === item) {
           return (

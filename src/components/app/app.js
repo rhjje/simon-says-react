@@ -25,7 +25,7 @@ class App extends React.Component {
       playMode: false,
       difficulty: localStorage.getItem('difficulty') || '1000',
       activeItem: null,
-      remainingItems: 0
+      remainingItems: 0,
     };
     this.handleClickPlay = this.handleClickPlay.bind(this);
     this.handleClickItem = this.handleClickItem.bind(this);
@@ -38,19 +38,23 @@ class App extends React.Component {
 
   handleClickItem(event) {
     if (this.state.playMode) {
-      if ((this.sequence[this.numberItem] === event.target.dataset.tile)
-      && this.numberItem === this.sequence.length - 1) {
+      if (
+        this.sequence[this.numberItem] === event.target.dataset.tile &&
+        this.numberItem === this.sequence.length - 1
+      ) {
         this.numberItem = 0;
         this.setState({
           playMode: false,
-          remainingItems: 0
+          remainingItems: 0,
         });
         const round = this.state.round + 1;
         setTimeout(() => {
           this.setState({ round }, () => this.playGame());
         }, 1000);
       } else if (this.sequence[this.numberItem] === event.target.dataset.tile) {
-        this.setState((prevState) => ({ remainingItems: prevState.remainingItems - 1 }));
+        this.setState((prevState) => ({
+          remainingItems: prevState.remainingItems - 1,
+        }));
         this.numberItem += 1;
       } else {
         this.setState({ gameOver: true });
@@ -60,7 +64,7 @@ class App extends React.Component {
             playMode: false,
             round: 0,
             remainingItems: 0,
-            gameOver: false
+            gameOver: false,
           });
         }, 2000);
       }
@@ -131,7 +135,7 @@ class App extends React.Component {
 
   deactivateCard() {
     this.setState({
-      activeItem: null
+      activeItem: null,
     });
   }
 
